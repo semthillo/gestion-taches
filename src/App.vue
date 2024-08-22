@@ -1,10 +1,10 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
+import Accueil from './components/Accueil.vue'
 </script>
 
 <template>
   <h1>projet</h1>
-  <HelloWorld  />
+  <Accueil  />
 </template>
 
 <style scoped>

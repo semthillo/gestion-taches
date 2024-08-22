@@ -3,7 +3,7 @@ import HelloWorld from './components/HelloWorld.vue'
 </script>
 
 <template>
- 
+  <h1>projet</h1>
   <HelloWorld  />
 </template>
 

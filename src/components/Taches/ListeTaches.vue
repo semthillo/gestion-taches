@@ -1,41 +1,56 @@
 <template>
-    <div>
-      <h3>Liste des Tâches</h3>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Nom</th>
-            <th>Description</th>
-            <th>Date de Début</th>
-            <th>Date de Fin</th>
-            <th>Tache</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="task in tasks" :key="task.id">
-            <td>{{ task.name }}</td>
-            <td>{{ task.description }}</td>
-            <td>{{ getProjectName(task.projectId) }}</td>
-            <td>{{ task.startDate }}</td>
-            <td>{{ task.endDate }}</td>
-            <td>
-              <button class="btn btn-primary btn-sm" @click="editTask(task.id)"><i class="bi bi-pencil-square"></i>Modifier</button>
-              <button class="btn btn-danger btn-sm" @click="deleteTask(task.id)"> <i class="bi bi-trash"></i>Supprimer</button>
-              <button class="btn btn-danger btn-sm" @click="descriptionTask(task.id)"><i class="bi bi-eye"></i>Details</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <router-link to="/tasks/new" class="btn btn-success">Ajouter une Tâche</router-link>
-    </div>
-  </template>
-  
-  <script setup>
- 
-  </script>
-  
-  <style scoped>
-  /* Ajoutez vos styles ici */
-  </style>
-  
+  <div>
+    <h3>Liste des Tâches</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Nom</th>
+          <th>Description</th>
+          <th>Date de Début</th>
+          <th>Date de Fin</th>
+          <th>Projet</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(tache, index) in store.taches" :key="index">
+          <td>{{ index + 1 }}</td>
+          <td>{{ tache.nom }}</td>
+          <td>{{ tache.description }}</td>
+          <td>{{ tache.Date_debut }}</td>
+          <td>{{ tache.Date_fin }}</td>
+          <td>{{ tache.projet }}</td>
+          <td>
+            <button class="btn btn-primary btn-sm" @click="editTache(index)"><i class="bi bi-pencil-square"></i>Modifier</button>
+            <button class="btn btn-danger btn-sm" @click="removeTache(index)"><i class="bi bi-trash"></i>Supprimer</button>
+            <button class="btn btn-info btn-sm" @click="showDetails(tache)"><i class="bi bi-eye"></i>Détails</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</template>
+
+<script setup>
+import { useGestionStore } from '../../store/gestion';
+
+const store = useGestionStore();
+ const newTache = { nom: '', Date_debut: '', Date_fin: '', projet: '' };
+
+function editTache(index) {
+  store.editTache(index, newTache.nom, newTache.Date_debut, newTache.Date_fin, newTache.projet);
+}
+
+function removeTache(index) {
+  store.removeTache(index);
+}
+
+function showDetails(tache) {
+  alert(`Nom: ${tache.nom}\nDescription: ${tache.description}\nDate de Début: ${tache.Date_debut}\nDate de Fin: ${tache.Date_fin}\nProjet: ${tache.projet}`);
+}
+</script>
+
+<style scoped>
+
+</style>

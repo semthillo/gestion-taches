@@ -1,4 +1,22 @@
 <script setup>
+import { ref } from 'vue';
+import { useGestionStore } from '../store/gestion';
+import ListerProjet from './Projets/ListerProjet.vue';
+import AjouterTaches from './Taches/AjouterTaches.vue';
+import ListeTaches from './Taches/ListeTaches.vue';
+import AjouterProjet from './Projets/AjouterProjet.vue';
+
+const showForm = ref(false); 
+const showFormP = ref(false)
+const store = useGestionStore();
+
+function toggleForm() {
+  showForm.value = !showForm.value; 
+}
+function toggleFormP(){
+  showFormP.value = !showFormP.value; 
+}
+
 (function () {
   "use strict";
   var tooltipTriggerList = [].slice.call(
@@ -11,22 +29,10 @@
 </script>
 
 <template>
-  <link
-    rel="canonical"
-    href="https://getbootstrap.com/docs/5.0/examples/sidebars/"
-  />
-
   <div class="content d-flex">
- 
     <main>
-      <div
-        class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark"
-        style="width: 280px"
-      >
-        <a
-          href="/"
-          class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none"
-        >
+      <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 280px">
+        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
           <svg class="bi me-2" width="40" height="32">
             <use xlink:href="#bootstrap" />
           </svg>
@@ -35,76 +41,72 @@
         <hr />
         <ul class="nav nav-pills flex-column mb-auto">
           <li class="nav-item">
-            <a href="#" class="nav-link active" aria-current="page">
-              <svg class="bi me-2" width="16" height="16">
-                <use xlink:href="#home" />
-              </svg>
-              Home
-            </a>
+            <router-link class="nav-link active" to="/">Accueil</router-link>
           </li>
           <li>
-            <a href="#" class="nav-link text-white">
-              <svg class="bi me-2" width="16" height="16">
-                <use xlink:href="#speedometer2" />
-              </svg>
-              Mes taches
-            </a>
+            <router-link class="nav-link text-white" to="/projet" @click="store.task = true">Mes Projets</router-link>
           </li>
           <li>
-            <a href="#" class="nav-link text-white">
-              <svg class="bi me-2" width="16" height="16">
-                <use xlink:href="#table" />
-              </svg>
-              Mes projet
-            </a>
+            <router-link class="nav-link text-white" to="/Taches" @click="store.task = false">Mes Tâches</router-link>
           </li>
         </ul>
         <hr />
         <div class="dropdown">
-          <a
-            href="#"
-            class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
-            id="dropdownUser1"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <img
-              src="https://images.pexels.com/photos/5685962/pexels-photo-5685962.jpeg?auto=compress&cs=tinysrgb&w=600"
-              alt=""
-              width="32"
-              height="32"
-              class="rounded-circle me-2"
-            />
+          <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="https://images.pexels.com/photos/5685962/pexels-photo-5685962.jpeg?auto=compress&cs=tinysrgb&w=600" alt="" width="32" height="32" class="rounded-circle me-2" />
             <strong>Aichetou Gaye</strong>
           </a>
-          <ul
-            class="dropdown-menu dropdown-menu-dark text-small shadow"
-            aria-labelledby="dropdownUser1"
-          >
+          <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
             <li><hr class="dropdown-divider" /></li>
-            <li><a class="dropdown-item" href="#">Deconnexion</a></li>
+            <li><a class="dropdown-item" href="#">Déconnexion</a></li>
           </ul>
         </div>
       </div>
     </main>
-
-    <div class="contentss">
-      <nav class="navbar navbar-light bg-light ">
+   
+         <div class="contentss" v-if="store.task">
+      <nav class="navbar navbar-light bg-light">
         <div class="container">
           <form class="d-flex">
-            <input
-              class="form-control me-2"
-              type="search"
-              placeholder="Rechercher..."
-              aria-label="Search"
-            />
+            <input class="form-control me-2" type="search" placeholder="Rechercher..." aria-label="Search" />
             <button type="button" class="btn btn-secondary">Recherche</button>
           </form>
-          <button type="button" class="btn btn-dark">Ajouter Une tache</button>
+          <button type="button" class="btn btn-dark" @click="toggleFormP">
+            Ajouter Un Projet
+          </button>
         </div>
       </nav>
-      <div class=""></div>
+      <div class="">
+        <ListerProjet />
+      </div>
     </div>
+
+    <div class="contentss" v-else>
+      <nav class="navbar navbar-light bg-light">
+        <div class="container">
+          <form class="d-flex">
+            <input class="form-control me-2" type="search" placeholder="Rechercher..." aria-label="Search" />
+            <button type="button" class="btn btn-secondary">Recherche</button>
+          </form>
+          <button type="button" class="btn btn-dark" @click="toggleForm">Ajouter Une Tâche</button>
+        </div>
+      </nav>
+      <div class="">
+        <ListeTaches />
+      </div>
+    </div>
+
+    <div v-if="showForm">
+      <AjouterTaches />
+
+    </div>
+    <div v-if="showFormP">
+      <AjouterProjet />
+
+    </div>
+
+    
+ 
   </div>
 </template>
 
@@ -122,18 +124,18 @@ main {
   display: flex;
   flex-wrap: nowrap;
   height: 100vh;
-    width: 25%;
+  width: 25%;
   max-height: 100vh;
   overflow-x: auto;
   overflow-y: hidden;
 }
-.contentss{
-    width: 65%;
-    display: flex;
-    flex-direction: column;
+.contentss {
+  width: 65%;
+  display: flex;
+  flex-direction: column;
 }
-.navbar{
-    width: 100%;
+.navbar {
+  width: 100%;
 }
 .b-example-divider {
   flex-shrink: 0;
@@ -212,4 +214,5 @@ main {
 .lh-tight {
   line-height: 1.25;
 }
+
 </style>
